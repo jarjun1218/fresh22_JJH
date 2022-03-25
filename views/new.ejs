@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script   src="https://cdn.tailwindcss.com"> </script>
+    <!--<link rel="stylesheet" href="../dist/tailwind.css">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Article</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4 mt-4">New Article</h1>
+
+        <form action="/articles/new" method="post">
+            <div class="form-group mb-3">
+                <label for="title">Title</label>
+                <input required value="<%= article.title %>" type="text" name="title" id="title" class="form-control">    
+            </div>
+            <div class="form-group mb-3">
+                <label for="innertext">Inner Text</label>
+                <textarea required name="innertext" id="innertext" class="form-control"><%= article.innertext %></textarea>
+            </div>
+            <div class="container mt-4">
+                <button type="submit" class="btn btn-primary">Send</button>
+                <a href="/articles" class="btn btn-secondary">Cancel</a>
+            </div>   
+        </form>
+    </div>
+</body>
+</html>

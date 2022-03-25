@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script   src="https://cdn.tailwindcss.com"> </script>
+    <!--<link rel="stylesheet" href="../dist/tailwind.css">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <% if (messages.error) { %>
+        <%= messages.error %>
+    <% } %>
+    <div class="">
+        <h1 class="">Login</h1>    
+    </div>
+    <div class="" >
+        <form action="/articles/login" method="post">
+            <div class="">
+                <label for="email">Email</label>
+                <input required type="email" name="email" id="email" class="" placeholder="請輸入電子郵件">
+            </div>
+            <div class="">
+                <label for="password">Password</label>
+                <input required type="password" name="password" id="password" class="" placeholder="請輸入密碼">
+            </div>
+            <div class="">
+                <button type="submit" class="">Login</button>
+                <a href="/articles/register" class="">Register</a>
+            </div>
+        </form> 
+    </div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!--<link rel="stylesheet" href="../dist/tailwind.css">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+</head>
+<body class="bg-black">
+    <header class="header bg-gray-300 mb-5">
+        <!--<img src="../public/images/IMG_0337.jpg" class="" />-->
+        <div class="inline-block m-3">
+            <a href="/">
+                <h1 class="text-3xl font-extrabold">JJHsu's Blog</h1>
+            </a>
+        </div>
+        <div class="inline-block bg-gray-300 rounded top-4 right-1 fixed">
+            <%_ if (req.session.logined) { -%> 
+                <ul>
+                    <li class="inline-block mr-5">
+                        <a href="/articles/edit_user/<%= req.session.name %>" class="hover:bg-slate-100 text-lg transition-all rounded">ChangePassword</a>
+                    </li>
+                    <li class="inline-block">
+                        <form action="/articles/logout?_method=DELETE" method="post" class="">
+                            <button type="submit" class="hover:bg-slate-100 text-lg transition-all rounded">Log Out</button>
+                        </form>
+                    </li>
+                </ul>
+            <%_ } else { -%>
+                <ul>
+                    <li class="inline-block mr-5">
+                        <button class="show-modal hover:bg-slate-100 text-lg transition-all rounded">Login</button>
+                    </li>
+                    <li class="inline-block">
+                        <a href="/articles/register" class="hover:bg-slate-100 text-lg transition-all rounded">Register</a>
+                    </li>
+                </ul>
+            <%_ } -%>
+        </div>
+        <img src="https://mdbootstrap.com/img/new/slides/041.jpg" class="w-full h-auto" alt="..." />
+    </header>
+
+    <div class="article m-5 p-2">
+        <%_ if (req.session.logined) { -%>
+            <button class="hover:bg-slate-300 transition-all rounded text-xl text-white show-modal">New Article</button>
+        <%_ } -%>
+        <% articles.forEach(article => { %>
+            <div class="mb-5">
+                <div class="m-5">
+                    <a href="/articles/more/<%= article.id %>" class="mb-3 text-xl font-bold text-white transition-all rounded hover:bg-slate-300"><%= article.title %></a>
+                    <div class="text-xs text-gray-200">
+                        <%= article.createdDate.toLocaleDateString() %>
+                        Created By <%= article.account %> 
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <div class="modal h-1/2 w-full fixed left-0 top-1/4 flex justify-center items-center hidden">
+        <div class="bg-slate-300 rounded shadow-lg w-1/2 h-2/3">
+            <h1 class="mb-4 mt-4 text-center">New Article</h1>
+        
+            <form action="/articles/new" method="post">
+                <div class="form-group mb-3 text-center">
+                    <label for="title">Title</label>
+                    <input required value="<%=  %>" type="text" name="title" id="title" class="">    
+                </div>
+                <div class="form-group mb-3 text-center">
+                    <label for="innertext" class="text-">Inner Text</label>
+                    <textarea required name="innertext" id="innertext" class=""><%=  %></textarea>
+                </div>
+                <div class="container mt-4 text-center">
+                    <button type="submit" class="mr-5 hover:bg-slate-400 transition-all rounded">Send</button>
+                    <button class="close-modal ml-5 hover:bg-slate-400 transition-all rounded">Cancel</button>
+                </div>   
+            </form>
+        </div> 
+    </div>
+
+    <div class="login-modal h-1/2 w-full fixed left-0 top-1/4 flex justify-center items-center hidden">
+        <div class="bg-slate-300 rounded shadow-lg w-1/2 h-2/3">
+            <div class="">
+                <a href="/" class="text-gray hover:shadow-md">X</a>
+            </div>
+            <div class="mt-5 mb-5">
+                <h1 class="text-2xl font-bold text-center">Login</h1>    
+            </div>
+            <div class="left-5 right-5" >
+                <form action="/articles/login" method="post">
+                    <div class="text-center justify-evenly">
+                        <label for="email">Email</label>
+                        <input required type="email" name="email" id="email" class="hover:shadow-xl mb-2" placeholder="請輸入電子郵件">
+                    </div>
+                    <div class="text-center justify-evenly">
+                        <label for="password">Password</label>
+                        <input required type="password" name="password" id="password" class="hover:shadow-xl" placeholder="請輸入密碼">
+                    </div>
+                    <div class="text-center mt-5 ">
+                        <button type="submit" class="mr-5 hover:bg-slate-100 rounded transition">Login</button>
+                        <a href="/articles/register" class="hover:bg-slate-100 rounded transition">Register</a>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-blue-500 bottom-0 fixed w-full">
+        <p class="text-center text-xs">Design by JJHsu</p>
+    </footer>
+
+    <script>  //control login modal
+        const loginModal = document.querySelector('.login-modal')
+        const header = document.querySelector('.header')
+        const article = document.querySelector('.article')
+        const showModal = document.querySelector('.show-modal')
+        const closeModal = document.querySelector('.close-modal')
+
+        showModal.addEventListener('click', () => {
+            loginModal.classList.remove('hidden')
+            article.classList.add('opacity-30')
+            header.classList.add('opacity-30')
+        })
+
+        closeModal.addEventListener('click', ()=> {
+            loginModal.classList.add('hidden')
+            article.classList.remove('opacity-30')
+            header.classList.remove('opacity-30')
+        })
+
+        closeModal.forEach(close => {
+            close.addEventListener('click', () => {
+            loginModal.classList.add('hidden')
+            article.classList.remove('opacity-30')
+            header.classList.remove('opacity-30')
+            })
+        })
+    </script>
+
+    <script>  //control new article modal
+        const modal = document.querySelector('.modal')
+
+        showModal.addEventListener('click', () => {
+            modal.classList.remove('hidden')
+            article.classList.add('opacity-30')
+            header.classList.add('opacity-30')
+        })
+
+        closeModal.addEventListener('click', ()=> {
+            modal.classList.add('hidden')
+            article.classList.remove('opacity-30')
+            header.classList.remove('opacity-30')
+        })
+
+        closeModal.forEach(close => {
+            close.addEventListener('click', () => {
+            modal.classList.add('hidden')
+            article.classList.remove('opacity-30')
+            header.classList.remove('opacity-30')
+            })
+        })
+    </script>
+
+    <div>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Corporis atque accusamus, veniam illo ratione quisquam quidem ipsum blanditiis explicabo, delectus, molestias fugit ipsam aliquid? Deleniti fuga omnis non temporibus quia iusto? Rerum minus distinctio nemo at cupiditate libero eveniet, alias iusto sequi officiis quae optio eos fugit culpa saepe, sit facilis harum neque ad accusamus! Esse sapiente porro adipisci? Nihil nulla minima veritatis repudiandae voluptates eaque, aut vitae id, voluptatibus nemo iusto ipsam dicta quibusdam officiis quisquam in ab atque.
+    </div>
+</body>
+</html>

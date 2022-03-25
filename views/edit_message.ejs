@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Edit Message</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4 mt-4">Edit Message</h1>
+        <form action="/articles/edit_message/<%= message.id.toString() %>?_method=put" method="post">
+            <div class="form-group mb-3">
+                <label for="message">Message</label>
+                <textarea required name="message" id="message" class="form-control"><%= message.content %></textarea>
+            </div>
+            <div class="container mt-4">
+                <button type="submit" class="btn btn-primary">Send</button>
+                <a href="/articles/more/<%= message.article_id %>" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
