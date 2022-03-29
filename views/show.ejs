@@ -9,14 +9,14 @@
     <title>Blog</title>
 </head>
 <body class="bg-black">
-    <header class="header bg-gray-300 mb-5">
+    <header class="header bg-gray-300 mb-5 top-0 w-full">
         <!--<img src="../public/images/IMG_0337.jpg" class="" />-->
         <div class="inline-block m-3">
             <a href="/">
                 <h1 class="text-3xl font-extrabold">JJHsu's Blog</h1>
             </a>
         </div>
-        <div class="inline-block bg-gray-300 rounded top-4 right-1 fixed">
+        <div class="inline-block bg-gray-300 rounded top-4 right-1">
             <%_ if (req.session.logined) { -%> 
                 <ul>
                     <li class="inline-block mr-5">
@@ -31,7 +31,7 @@
             <%_ } else { -%>
                 <ul>
                     <li class="inline-block mr-5">
-                        <a href="/articles/login" class="hover:bg-slate-100 text-lg transition-all rounded">Login</a>
+                        <button class="hover:bg-slate-100 text-lg transition-all rounded show-modal">Login</button>
                     </li>
                     <li class="inline-block">
                         <a href="/articles/register" class="hover:bg-slate-100 text-lg transition-all rounded">Register</a>
@@ -41,7 +41,7 @@
         </div>
     </header>
 
-    <div class="m-5">
+    <div class="main m-5">
         <div class="m-6">
             <h1 class="text-3xl text-white font-extrabold mb-3"><%= article.title %></h1>
             <div class="text-gray-300 text-xs mb-5">
@@ -56,7 +56,7 @@
                 </form>  
             <%_ } -%>   
             <div class="bg-gray-200 rounded m-5">
-                <div class="">
+                <div class="m-5">
                     <p class="text-lg"><%= article.innertext %></p>
                 </div>    
             </div>
@@ -98,5 +98,89 @@
             <%_ } -%>
         </div>
     </div>
+
+    <!-- login modal -->
+    <div class="login-modal h-1/2 w-full fixed left-0 top-1/4 flex justify-center items-center hidden">
+        <div class="bg-slate-300 rounded shadow-lg w-1/2 h-2/3">
+            <div class="mr-2 mt-2 flex flex-row-reverse">
+                <button class="text-gray hover:shadow-md close-modal">X</button>
+            </div>
+            <div class="mb-5">
+                <h1 class="text-2xl font-bold text-center">Login</h1>    
+            </div>
+            <div class="left-5 right-5" >
+                <form action="/articles/login" method="post"> 
+                    <div class="text-left justify-evenly">
+                        <label for="email">Email</label>
+                        <input required type="email" name="email" id="email" class="hover:shadow-xl mb-2 w-2/3" placeholder="請輸入電子郵件">
+                    </div>
+                    <div class="text-left justify-evenly">
+                        <label for="password">Password</label>
+                        <input required type="password" name="password" id="password" class="hover:shadow-xl w-1/2" placeholder="請輸入密碼">
+                    </div>
+                    <div class="text-center mt-5 ">
+                        <button type="submit" class="mr-5 hover:bg-slate-100 rounded transition hover:shadow-xl">Login</button>
+                        <a href="/articles/register" class="hover:bg-slate-100 rounded transition hover:shadow-xl">Register</a>
+                    </div>
+                </form> 
+            </div>
+        </div>
+    </div>
+
+    <script>  //control login modal
+        const loginModal = document.querySelector('.login-modal')
+        const header = document.querySelector('.header')
+        const main = document.querySelector('.main')
+        const showModal = document.querySelector('.show-modal')
+        const closeModal = document.querySelector('.close-modal')
+
+        showModal.addEventListener('click', () => {
+            loginModal.classList.remove('hidden')
+            main.classList.add('opacity-30')
+            header.classList.add('opacity-30')
+        })
+
+        closeModal.addEventListener('click', ()=> {
+            loginModal.classList.add('hidden')
+            main.classList.remove('opacity-30')
+            header.classList.remove('opacity-30')
+        })
+
+        closeModal.forEach(close => {
+            close.addEventListener('click', () => {
+            loginModal.classList.add('hidden')
+            main.classList.remove('opacity-30')
+            header.classList.remove('opacity-30')
+            })
+        })
+    </script>
+
+    <script>  //control edit article modal
+        // const article = document.querySelector('.article')
+        // const header = document.querySelector('.header')
+        const editModal = document.querySelector('.edit-modal')
+        const showEditModal = document.querySelector('.show-editModal')
+        const closeEditModal = document.querySelector('.close-editModal')
+
+        showEditModal.addEventListener('click', () => {
+            editModal.classList.remove('hidden')
+            main.classList.add('opacity-30')
+            header.classList.add('opacity-30')
+        })
+
+        closeEditModal.EventListener('click', ()=> {
+            editModal.classList.add('hidden')
+            main.classList.remove('opacity-30')
+            header.classList.remove('opacity-30')
+        })
+
+        closeEditModal.forEach(close => {
+            close.addEventListener('click', () => {
+            editModal.classList.add('hidden')
+            main.classList.remove('opacity-30')
+            header.classList.remove('opacity-30')
+            })
+        })
+    </script>
 </body>
 </html>

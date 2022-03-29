@@ -9,6 +9,7 @@ const methodOverride = require('method-override')
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
+const jwt = require('jsonwebtoken')
 const User = require('./models/user')
 
 

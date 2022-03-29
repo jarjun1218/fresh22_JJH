@@ -9,14 +9,14 @@
     <title>Blog</title>
 </head>
 <body class="bg-black">
-    <header class="header bg-gray-300 mb-5">
-        <!--<img src="../public/images/IMG_0337.jpg" class="" />-->
+    <!-- banner -->
+    <header class="header bg-gray-300 mb-5 top-0 w-full">
         <div class="inline-block m-3">
             <a href="/">
                 <h1 class="text-3xl font-extrabold">JJHsu's Blog</h1>
             </a>
         </div>
-        <div class="inline-block bg-gray-300 rounded top-4 right-1 fixed">
+        <div class="inline-block bg-gray-300 rounded top-4 right-1">
             <%_ if (req.session.logined) { -%> 
                 <ul>
                     <li class="inline-block mr-5">
@@ -39,12 +39,12 @@
                 </ul>
             <%_ } -%>
         </div>
-        <img src="https://mdbootstrap.com/img/new/slides/041.jpg" class="w-full h-auto" alt="..." />
     </header>
 
-    <div class="article m-5 p-2">
+    <!-- article list -->
+    <main class="article m-5 ">
         <%_ if (req.session.logined) { -%>
-            <button class="hover:bg-slate-300 transition-all rounded text-xl text-white show-modal">New Article</button>
+            <button class="hover:bg-slate-300 transition-all rounded text-xl text-white show-articleModal">New Article</button>
         <%_ } -%>
         <% articles.forEach(article => { %>
             <div class="mb-5">
@@ -57,50 +57,52 @@
                 </div>
             </div>
         <% }) %>
-    </div>
+    </main>
 
-    <div class="modal h-1/2 w-full fixed left-0 top-1/4 flex justify-center items-center hidden">
-        <div class="bg-slate-300 rounded shadow-lg w-1/2 h-2/3">
-            <h1 class="mb-4 mt-4 text-center">New Article</h1>
+    <!-- create article modal -->
+    <div class="article-modal h-1/2 w-full fixed left-0 top-1/4 justify-center items-center hidden">
+        <div class="bg-slate-300 rounded shadow-lg w-2/3 h-3/4">
+            <h1 class="mb-4 mt-4 text-center text-2xl">New Article</h1>
         
             <form action="/articles/new" method="post">
                 <div class="form-group mb-3 text-center">
-                    <label for="title">Title</label>
-                    <input required value="<%=  %>" type="text" name="title" id="title" class="">    
+                    <label for="title" class="text-xl">Title</label>
+                    <input required value="<%=  %>" type="text" name="title" id="title" class="hover:shadow-xl mb-2 w-1/2">    
                 </div>
                 <div class="form-group mb-3 text-center">
-                    <label for="innertext" class="text-">Inner Text</label>
-                    <textarea required name="innertext" id="innertext" class=""><%=  %></textarea>
+                    <label for="innertext" class="text-xl">Inner Text</label>
+                    <textarea required name="innertext" id="innertext" class="hover:shadow-xl mb-2 w-1/2"><%=  %></textarea>
                 </div>
                 <div class="container mt-4 text-center">
                     <button type="submit" class="mr-5 hover:bg-slate-400 transition-all rounded">Send</button>
-                    <button class="close-modal ml-5 hover:bg-slate-400 transition-all rounded">Cancel</button>
+                    <button class="close-articleModal ml-5 hover:bg-slate-400 transition-all rounded">Cancel</button>
                 </div>   
             </form>
         </div> 
     </div>
 
-    <div class="login-modal h-1/2 w-full fixed left-0 top-1/4 flex justify-center items-center hidden">
+    <!-- login modal -->
+    <div class="login-modal h-1/2 w-full fixed left-0 top-1/4 justify-center items-center hidden">
         <div class="bg-slate-300 rounded shadow-lg w-1/2 h-2/3">
-            <div class="">
-                <a href="/" class="text-gray hover:shadow-md">X</a>
+            <div class="mr-2 mt-2 flex flex-row-reverse">
+                <button class="text-gray hover:shadow-md close-modal">X</button>
             </div>
-            <div class="mt-5 mb-5">
+            <div class="mb-5">
                 <h1 class="text-2xl font-bold text-center">Login</h1>    
             </div>
             <div class="left-5 right-5" >
-                <form action="/articles/login" method="post">
-                    <div class="text-center justify-evenly">
+                <form action="/articles/login" method="post"> 
+                    <div class="items-center text-center justify-evenly">
                         <label for="email">Email</label>
-                        <input required type="email" name="email" id="email" class="hover:shadow-xl mb-2" placeholder="請輸入電子郵件">
+                        <input required type="email" name="email" id="email" class="hover:shadow-xl mb-2 w-1/2" placeholder="請輸入電子郵件">
                     </div>
-                    <div class="text-center justify-evenly">
+                    <div class="items-center text-center justify-evenly">
                         <label for="password">Password</label>
-                        <input required type="password" name="password" id="password" class="hover:shadow-xl" placeholder="請輸入密碼">
+                        <input required type="password" name="password" id="password" class="hover:shadow-xl w-1/2" placeholder="請輸入密碼">
                     </div>
-                    <div class="text-center mt-5 ">
-                        <button type="submit" class="mr-5 hover:bg-slate-100 rounded transition">Login</button>
-                        <a href="/articles/register" class="hover:bg-slate-100 rounded transition">Register</a>
+                    <div class="items-center text-center mt-5 ">
+                        <button type="submit" class="mr-5 hover:bg-slate-100 rounded transition hover:shadow-xl">Login</button>
+                        <a href="/articles/register" class="hover:bg-slate-100 rounded transition hover:shadow-xl">Register</a>
                     </div>
                 </form> 
             </div>
@@ -140,23 +142,25 @@
     </script>
 
     <script>  //control new article modal
-        const modal = document.querySelector('.modal')
+        const articleModal = document.querySelector('.article-modal')
+        const showArticleModal = document.querySelector('.show-articleModal')
+        const closeArticleModal = document.querySelector('.close-articleModal')
 
-        showModal.addEventListener('click', () => {
-            modal.classList.remove('hidden')
+        showArticleModal.addEventListener('click', () => {
+            articleModal.classList.remove('hidden')
             article.classList.add('opacity-30')
             header.classList.add('opacity-30')
         })
 
-        closeModal.addEventListener('click', ()=> {
-            modal.classList.add('hidden')
+        closeArticleModal.addEventListener('click', ()=> {
+            articleModal.classList.add('hidden')
             article.classList.remove('opacity-30')
             header.classList.remove('opacity-30')
         })
 
-        closeModal.forEach(close => {
+        closeArticleModal.forEach(close => {
             close.addEventListener('click', () => {
-            modal.classList.add('hidden')
+            articleModal.classList.add('hidden')
             article.classList.remove('opacity-30')
             header.classList.remove('opacity-30')
             })
