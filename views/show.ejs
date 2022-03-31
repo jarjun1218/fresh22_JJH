@@ -50,8 +50,8 @@
             </div>
             <a href="/articles" class="inline-block text-white text-lg hover:bg-gray-300 rounded shadow-md">Back</a>
             <%_ if (req.session.name === article.account || req.session.name === "Admin") { -%> 
-                <a href="/articles/edit/<%- article.id %>" class="inline-block text-white text-lg hover:bg-gray-200">Edit</a>
-                <form action="/articles/<%- article.id %>?_method=DELETE" method="post" class="inline-block text-white text-lg hover:bg-gray-200">
+                <a href="/articles/edit/<%- article.id %>" class="inline-block text-white text-lg transition-all rounded hover:bg-gray-200">Edit</a>
+                <form action="/articles/<%- article.id %>?_method=DELETE" method="post" class="inline-block text-white text-lg transition-all rounded hover:bg-gray-200">
                     <button type="submit" class="">Delete</button>
                 </form>  
             <%_ } -%>   
@@ -100,7 +100,7 @@
     </div>
 
     <!-- login modal -->
-    <div class="login-modal h-1/2 w-full fixed left-0 top-1/4 flex justify-center items-center hidden">
+    <div class="login-modal h-1/2 w-full fixed left-0 top-1/4 justify-center items-center hidden">
         <div class="bg-slate-300 rounded shadow-lg w-1/2 h-2/3">
             <div class="mr-2 mt-2 flex flex-row-reverse">
                 <button class="text-gray hover:shadow-md close-modal">X</button>
