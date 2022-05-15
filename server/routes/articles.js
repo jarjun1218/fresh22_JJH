@@ -1,10 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const Article = require('./../models/article')
-const User = require('./../models/user')
-const Message = require('./../models/message')
+const Article = require('../models/article')
+const User = require('../models/user')
+const Message = require('../models/message')
 const Mongoose = require('mongoose')
-const e = require('express')
 
 
 //登入頁面

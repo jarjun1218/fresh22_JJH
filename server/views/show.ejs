@@ -54,7 +54,7 @@
                 <form action="/articles/<%- article.id %>?_method=DELETE" method="post" class="inline-block text-white text-lg transition-all rounded hover:bg-gray-200">
                     <button type="submit" class="">Delete</button>
                 </form>  
-            <%_ } -%>   
+            <%_ } -%>      
             <div class="bg-gray-200 rounded m-5">
                 <div class="m-5">
                     <p class="text-lg"><%= article.innertext %></p>
@@ -78,9 +78,9 @@
                             </p>
                         <br>
                         <%_ if(req.session.name === message.account || req.session.name === "Admin") { -%> 
-                            <a href="/articles/edit_message/<%= message.id %>" class="inline-block">Edit</a>
+                            <a href="/articles/edit_message/<%= message.id %>" class="inline-block hover:bg-gray-400 rounded">Edit</a>
                             <form action="/articles/delete_message/<%= message.id %>?_method=DELETE" method="post" class="inline-block">
-                                <button type="submit" class="inline-block">Delete</button> 
+                                <button type="submit" class="inline-block hover:bg-gray-400 rounded">Delete</button> 
                             </form>
                         <%_ } -%> 
                     </div>

@@ -10,10 +10,12 @@ const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
 const jwt = require('jsonwebtoken')
-const User = require('./models/user')
+const bodyParser = require('body-parser')
 
 
-mongoose.connect('mongodb://localhost/blog')
+mongoose.connect('mongodb://localhost/blog', () => {
+  console.log("MongoDB database Connected...")
+})
 
 app.set('view engine', 'ejs')
 
@@ -25,6 +27,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+app.use(bodyParser.json())
 /*
 app.use(passport.initialize())
 app.use(passport.session())
@@ -39,6 +42,20 @@ passport.deserializeUser(function(id, done) {
   })
 })
 */
+const cors = require('cors')
+
+app.use(cors({  
+  origin:['http://localhost:8080'],
+  methods:['GET','POST'],
+}))
+
+app.all('*',function (req, res, next) {
+res.header('Access-Control-Allow-Origin', 'http://localhost:8080')
+res.header('Access-Control-Allow-Headers', 'Content-Type')
+res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS')
+　next()
+})
+
 const articleRouter = require('./routes/articles') 
 app.use('/articles', articleRouter)
 
@@ -46,4 +63,6 @@ app.get('/', (req, res) => {
   res.redirect('/articles')
 })
 
-app.listen(5000)
+const port = process.env.PORT || 5000
+
+app.listen(port, () => console.log(`App listening on port ${port}`))
