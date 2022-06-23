@@ -17,17 +17,21 @@ mongoose.connect('mongodb://localhost/blog', () => {
   console.log("MongoDB database Connected...")
 })
 
-app.set('view engine', 'ejs')
+// app.set('view engine', 'ejs')
 
 app.use(express.urlencoded({ extended: false }))
 app.use(methodOverride('_method'))
 app.use(flash())
 app.use(session({
     secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      
+    }
 }))
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 /*
 app.use(passport.initialize())
 app.use(passport.session())
@@ -45,23 +49,25 @@ passport.deserializeUser(function(id, done) {
 const cors = require('cors')
 
 app.use(cors({  
-  origin:['http://localhost:8080'],
-  methods:['GET','POST'],
+  origin:['http://127.0.0.1:8080'],
+  methods:['GET','POST','PUT','DELETE'],
+  credentials: true
 }))
 
 app.all('*',function (req, res, next) {
-res.header('Access-Control-Allow-Origin', 'http://localhost:8080')
+res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8080')
 res.header('Access-Control-Allow-Headers', 'Content-Type')
 res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS')
-　next()
+res.header('Access-Control-Allow-Credentials', true)
+next()
 })
 
 const articleRouter = require('./routes/articles') 
 app.use('/articles', articleRouter)
 
-app.get('/', (req, res) => {
-  res.redirect('/articles')
-})
+// app.get('/', (req, res) => {
+//   res.redirect('/articles')
+// })
 
 const port = process.env.PORT || 5000
 
