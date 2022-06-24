@@ -1,7 +1,8 @@
 <template>
     <div class="flex justify-center min-h-screen bg-gray-100">
         <div class="mt-16 h-1/2 px-8 py-6 text-left bg-white shadow-lg">
-            <h3 class="text-2xl font-bold text-center">Login to your account</h3>
+            <p v-if="error" class="flex justify-center items-center text-lg font-medium font-mono text-white bg-red-600 rounded-lg mb-3">Error</p>
+            <h3 class="text-2xl font-bold text-center font-serif">Login to your account</h3>
             <form @submit.prevent="Login">
                 <div class="mt-4">
                     <div>
@@ -31,7 +32,8 @@
         data() {
             return {
                 email: '',
-                password: ''
+                password: '',
+                error: false
             }
         },
         methods: {
@@ -40,13 +42,12 @@
                     email: this.email,
                     password: this.password,
                 })
-                if (response.data.message === "Succese") {
-                    // this.$store.state.isLogined = true
-                    // this.$store.state.loginAccount = response.data.name 
+                if (response.data.message === "Succese") { 
                     this.$store.commit("Logined")
-                    router.replace('/')
+                    this.$store.state.loginAccount = response.data.name
+                    router.push('/')
                 } else {
-                    router.replace('/login')
+                    this.error = true
                 }
             }
         }

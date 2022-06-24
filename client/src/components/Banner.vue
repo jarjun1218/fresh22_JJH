@@ -12,18 +12,18 @@
 
             <div class="flex w-1/2 justify-end content-center">
                 <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
-                    <li v-if="!isLogined" class="ml-2">
+                    <li v-if="!isLogined" class="ml-3">
                         <router-link to="/login" class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2">LOGIN</router-link>
                     </li>
-                    <li v-if="!isLogined" class="ml-2">
+                    <li v-if="!isLogined" class="ml-3 mr-2">
                         <router-link to="/register" class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2">REGISTER</router-link>
                     </li>
-                    <li v-if="isLogined" class="ml-2">
+                    <li v-if="isLogined" class="ml-3">
                         <form @submit.prevent="Post">
                             <button type="submit" class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2">POST</button>
                         </form>
                     </li>
-                    <li v-if="isLogined" class="ml-2">
+                    <li v-if="isLogined" class="ml-3 mr-2">
                         <form @submit.prevent="Logout">
                             <button type="submit" class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2">Logout</button>
                         </form>
@@ -67,6 +67,9 @@
                 this.$store.commit("Logout")
                 if (this.$store.state.postStatus) {
                     this.$store.commit("Post")
+                }
+                if (this.$store.state.editStatus){
+                    this.$store.commit("Edit")
                 }
             },
             Post() {

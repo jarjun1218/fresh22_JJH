@@ -4,7 +4,8 @@ import createPersistedState from "vuex-persistedstate"
 export default createStore({
   state: {
     isLogined: false,
-    postStatus: false
+    loginAccount: '',
+    postStatus: false,
   },
   getters: {
   },
@@ -17,7 +18,7 @@ export default createStore({
     },
     Post(state) {
       state.postStatus = !state.postStatus
-    }
+    },
   },
   actions: {
   },

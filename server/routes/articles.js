@@ -9,7 +9,7 @@ const Mongoose = require('mongoose')
 //登入功能
 router.post('/login', (req, res) => {
     if (req.session.logined) {
-        // res.redirect('/articles')
+        // 
     } else {
         User.findOne({ email: req.body.email, password: req.body.password }).exec((err, result) => {
             if (result !== null) {
@@ -17,22 +17,11 @@ router.post('/login', (req, res) => {
                 req.session.account = result.email
                 req.session.name = result.name
                 console.log('Logined Now: ' + req.session.name)
-                //res.redirect('/articles')
                 res.send({message: 'Succese', name: req.session.name})
             } else {
-                //res.redirect('/articles/login')
                 res.send({message: 'Error'})
             }
         })
-    }
-})
-
-// 註冊頁面
-router.get('/register', (req, res) => {
-    if (req.session.logined) {
-        res.redirect('/articles')
-    } else {
-        res.render('register')
     }
 })
 
@@ -88,16 +77,6 @@ router.put('/edit_user/:name', async (req,res) => {
 router.delete('/logout', (req,res) => {
     console.log(`${req.session.name} has logged out`)
     req.session.destroy()
-    // res.redirect('/articles')
-})
-
-//登入狀態
-router.get('/user', (req, res) => {
-    if (req.session.logined) {
-        res.send({loginStatus: true, loginAccount: req.session.name})
-    } else {
-        res.send({loginStatus: false, loginAccount: ''})
-    }
 })
 
 // 首頁
@@ -111,22 +90,9 @@ router.get('/more/:id', async (req, res) => {
     const article = await Article.findById(req.params.id)
     const messages = await Message.find({ article_id: Mongoose.Types.ObjectId(req.params.id)})
     if (article === null) {
-        // res.redirect('/articles')
         res.send({ error: "This post DNE!" })
     } else {
-        // res.render('show', { article: article, messages: messages, req: req })
         res.send({ article: article, messages: messages })
-    }
-})
-
-// 新增文章頁面
-router.get('/new', (req, res) => {
-    if (req.session.logined) {
-        // res.render('new', { article: new Article() })
-        res.send({ article: new Article() })
-    } else {
-        // res.redirect('/articles/login')
-        res.send({ error: "Please Login!" })
     }
 })
 
@@ -146,32 +112,25 @@ router.post('/new', async (req, res, next) => {
     }
 })
 
-// 修改文章頁面
-router.get('/edit/:id', async (req, res) => {
-    const article = await Article.findById(req.params.id)
-    // res.render('edit', { article: article })
-    res.send(article)
-})
-
 // 修改文章功能
 router.put('/:id', async (req, res, next) => {
-    req.article = await Article.findById(req.params.id)
-    next()
-}, saveArticleAndRedirect('edit'))
+    let article = await Article.findById(req.params.id)
+    article.account = req.session.name,
+    article.title = req.body.title
+    article.innertext = req.body.innertext
+    try {
+        article = await article.save()
+        res.send({ message: 'Succese' })
+    } catch(e) {
+        console.log(e)
+        res.send({ message: 'Error' })
+    }
+})
 
 // 刪除文章功能
 router.delete('/:id', async (req, res) => {
     await Article.findByIdAndDelete(req.params.id)
-    // res.redirect('/articles')
 })
-
-/*
-// 新增留言頁面
-router.get('/:id/new_message', async (req, res) => {
-    const article = await Article.find({ slug: req.params.slug })
-    res.render('newmessage', { article: article, message: new Message() })
-})
-*/
 
 // 新增留言功能
 router.post('/new_message/:id', async (req, res) => {
@@ -182,17 +141,9 @@ router.post('/new_message/:id', async (req, res) => {
         content: req.body.message,
         article_id: Mongoose.Types.ObjectId(req.params.id)
         }).save()
-        // res.redirect(`/articles/more/${req.params.id}`)
     } catch(e) {
-        // res.render('show', { article: article })
+        // 
     }
-})
-
-// 編輯留言介面
-router.get('/edit_message/:id', async (req, res) => {
-    const message = await Message.findById(req.params.id)
-    // res.render('edit_message', { message: message })
-    res.send(message)
 })
 
 // 編輯留言功能
@@ -201,9 +152,8 @@ router.put('/edit_message/:id', async (req, res) => {
     message.content = req.body.message
     try {
         message = await message.save()
-        // res.redirect(`/articles/more/${message.article_id}`)
     } catch(e) {
-        // res.render('edit_message', { message: message })
+        // 
     }
 })
 
@@ -212,59 +162,7 @@ router.delete('/delete_message/:id', async (req, res) => {
     const message = await Message.findById(req.params.id)
     const article_id = message.article_id
     await Message.findByIdAndDelete(req.params.id)
-    // res.redirect(`/articles/more/${article_id}`)
-    
+    // 
 })
 
-function saveArticleAndRedirect(path) {
-    return async (req, res) => {
-        let article = req.article
-        article.account = req.session.name
-        article.title = req.body.title
-        article.innertext =  req.body.innertext
-        try {
-            article = await article.save()
-            res.redirect(`/articles/more/${article.id}`)
-        } catch (e) {
-            res.render(`${path}`, { article: article })
-        }
-    }
-}
-/*
-function checkAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next()
-    }
-    res.redirect('/login')
-}
-
-function checkNotAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return res.redirect('/')
-    }
-    next()
-}
-*/
-
 module.exports = router
-
-/*
-passport.use(new LocalStrategy({usernameField: 'email'},
-  function(email, password, done) {
-    User.findOne({ email: email }, function(err, user) {
-      if (err) { return done(err) }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' })
-      }
-      User.comparePassword(password, user.password, function(err, result){
-        if(err) throw err
-        if(result) {
-          return done(null, user)
-        } else {
-          return done(null, false, {message: 'Invalid password'})
-        }
-      })
-    })
-  }
-))
-*/
