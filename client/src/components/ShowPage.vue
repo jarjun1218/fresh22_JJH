@@ -56,8 +56,8 @@
                                 <h3 class="mb-5 text-3xl md:text-4xl text-coolGray-900 font-bold tracking-tighter font-serif">{{article.title}}</h3>
                                 <div class="flex justify-between">
                                     <p class="text-coolGray-500 font-medium font-mono">{{article.account}} at {{ FormatDate(article.createdDate)}}</p>
-                                    <div v-if="isLogined && this.$store.state.loginAccount === article.account" class="">
-                                        <button @click="EditMessageStatus" class="ml-2">Edit</button>
+                                    <div v-if="isLogined && account === article.account" class="">
+                                        <button @click="EditStatus" class="ml-2">Edit</button>
                                         <button @click="DeletePost" class="ml-2">Delete</button>
                                     </div>
                                 </div>
@@ -89,16 +89,16 @@
                                     <div class="flex-none bg-white rounded-b rounded-t-none overflow-hidden shadow-lg">
                                         <div class="flex items-center justify-between">
                                             <p class="text-gray-800 font-serif text-base px-12 mb-5">{{message.content}}</p>
-                                            <div v-if="isLogined && this.$store.state.loginAccount === message.account" class="">
-                                                <button @click="EditMessageStatus" class="mr-2 text-sm hover:underline">Edit</button>
+                                            <div v-if="isLogined && account === message.account" class="">
+                                                <button @click="EditMessageStatus(message._id)" class="mr-2 text-sm hover:underline">Edit</button>
                                                 <button @click="DeleteMessage(message._id)" class="mr-5 text-sm hover:underline">Delete</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="editMessageStatus && this.$store.state.loginAccount === message.account" class="flex justify-end mt-3">
+                                <div v-if="editMessageStatus && account === message.account && messageID === message._id" class="flex justify-end mt-3">
                                     <form @submit.prevent="EditMessage(message._id, message.content)" class="">
-                                        <input required v-model="message.content" id="message" rows="5" class="inline-block pr-16 text-sm text-gray-900 bg-gray-100 rounded-lg border border-gray-300" placeholder="" />
+                                        <input required v-model="message.content" rows="5" class="inline-block pr-16 text-sm text-gray-900 bg-gray-100 rounded-lg border border-gray-300" placeholder="" />
                                         <button type="submit" class=" inline-block text-xl font-serif mx-3 rounded hover:bg-gray-200 hover:shadow-md hover:underline">Send</button>
                                     </form>
                                 </div>
@@ -140,6 +140,7 @@
                 account: '',
                 editStatus: false,
                 editMessageStatus: false,
+                messageID: '',
             }
         },
         methods: {
@@ -196,8 +197,9 @@
             EditStatus() {
                 this.editStatus = !this.editStatus
             },
-            EditMessageStatus() {
+            EditMessageStatus(id) {
                 this.editMessageStatus = !this.editMessageStatus
+                this.messageID = id
             }
         },
         mounted() {
@@ -209,6 +211,8 @@
             .catch(function (error) {
                 console.log(error)
             })
+
+            this.account = this.$store.state.loginAccount
         },
         computed: {
             isLogined() {
